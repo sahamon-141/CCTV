@@ -11,25 +11,59 @@
     <div class="container">
         <h1 class="my-4">Recordings</h1>
         
-        <div class="row mb-4">
-            <div class="col">
-                <form method="POST" action="{{ url_for('filter_recordings') }}" class="row g-3">
-                    <div class="col-md-4">
-                        <input type="date" name="date" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <select name="camera_name" class="form-select">
-                            <option value="">All Cameras</option>
-                            {% if cameras %}
-                                {% for name in cameras.keys() %}
-                                <option value="{{ name }}">{{ name }}</option>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Filter Recordings</h5>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('recordings') }}">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Date</label>
+                            <select name="date" class="form-select">
+                                <option value="">All Dates</option>
+                                {% for date in available_dates %}
+                                <option value="{{ date }}" {% if current_filters.date == date %}selected{% endif %}>{{ date }}</option>
                                 {% endfor %}
-                            {% endif %}
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                        <a href="{{ url_for('recordings') }}" class="btn btn-secondary">Reset</a>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label">Hour</label>
+                            <select name="hour" class="form-select">
+                                <option value="">All Hours</option>
+                                {% for hour in available_hours %}
+                                <option value="{{ hour }}" {% if current_filters.hour == hour %}selected{% endif %}>{{ hour }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label">Minute</label>
+                            <select name="minute" class="form-select">
+                                <option value="">All Minutes</option>
+                                {% for minute in available_minutes %}
+                                <option value="{{ minute }}" {% if current_filters.minute == minute %}selected{% endif %}>{{ minute }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label class="form-label">Camera</label>
+                            <select name="camera_name" class="form-select">
+                                <option value="">All Cameras</option>
+                                {% if cameras %}
+                                    {% for name in cameras.keys() %}
+                                    <option value="{{ name }}" {% if current_filters.camera_name == name %}selected{% endif %}>{{ name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
+                            <a href="{{ url_for('recordings') }}" class="btn btn-secondary">Reset</a>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -40,7 +74,8 @@
                 <thead>
                     <tr>
                         <th>Camera</th>
-                        <th>Path</th>
+                        <th>Date</th>
+                        <th>Time</th>
                         <th>Size</th>
                         <th>Modified</th>
                         <th>Actions</th>
@@ -51,18 +86,20 @@
                         {% for rec in recordings %}
                         <tr>
                             <td>{{ rec.camera }}</td>
-                            <td>{{ rec.path }}</td>
+                            <td>{{ rec.date }}</td>
+                            <td>{{ rec.hour }}:{{ rec.minute }}</td>
                             <td>{{ (rec.size/1024/1024)|round(2) }} MB</td>
                             <td>{{ rec.modified }}</td>
                             <td>
                                 <a href="{{ url_for('download_recording', filename=rec.path) }}" class="btn btn-sm btn-success">Download</a>
                                 <a href="{{ url_for('delete_recording', filename=rec.path) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                <a href="{{ url_for('play_recording', filename=rec.path) }}" class="btn btn-sm btn-info">Play</a>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-                            <td colspan="5" class="text-center">No recordings found</td>
+                            <td colspan="6" class="text-center">No recordings found matching your filters</td>
                         </tr>
                     {% endif %}
                 </tbody>
@@ -71,5 +108,19 @@
         
         <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
     </div>
+
+    <script>
+        // Update hour dropdown when date changes
+        document.querySelector('select[name="date"]').addEventListener('change', function() {
+            // In a real implementation, you would fetch available hours via AJAX
+            // For now, the page will reload with the new date filter
+            this.form.submit();
+        });
+
+        // Update minute dropdown when hour changes
+        document.querySelector('select[name="hour"]').addEventListener('change', function() {
+            this.form.submit();
+        });
+    </script>
 </body>
 </html>

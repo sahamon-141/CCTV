@@ -41,17 +41,22 @@ class StorageManager:
                     })
         return recordings
     
-    def filter_recordings(self, date=None, camera_name=None):
+    def filter_recordings(self, date=None, camera_name=None, hour=None, minute=None):
         all_recordings = self.get_recordings()
         filtered = []
-        
+    
         for rec in all_recordings:
-            if date and date not in rec['path']:
+        # Apply filters
+            if date and date != rec['date']:
                 continue
             if camera_name and camera_name != rec['camera']:
                 continue
+            if hour and hour != rec['hour']:
+                continue
+            if minute and minute != rec['minute']:
+                continue
             filtered.append(rec)
-        
+    
         return filtered
     
     def delete_recording(self, rel_path):

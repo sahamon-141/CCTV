@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Play Recording</title>
+</head>
+<body>
+    <div style="max-width: 800px; margin: 20px auto;">
+        <h2>Playing Recording</h2>
+        <video width="100%" controls autoplay>
+            <source src="{{ video_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('recordings') }}" class="btn btn-secondary">Back to Recordings</a>
+        </div>
+    </div>
+</body>
+</html>

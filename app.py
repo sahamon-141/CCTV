@@ -66,11 +66,40 @@ def fullscreen(camera_name):
 
 @app.route('/recordings')
 def recordings():
-    recordings = storage_manager.get_recordings()
-    cameras = camera_manager.get_cameras()  # Get the cameras list
+    date_filter = request.args.get('date')
+    camera_filter = request.args.get('camera_name')
+    hour_filter = request.args.get('hour')
+    minute_filter = request.args.get('minute')
+    
+    recordings = storage_manager.filter_recordings(
+        date=date_filter,
+        camera_name=camera_filter,
+        hour=hour_filter,
+        minute=minute_filter
+    )
+    
+    cameras = camera_manager.get_cameras()
+    
+    # Get unique dates, hours, and minutes for dropdowns
+    all_recordings = storage_manager.get_recordings()
+    available_dates = sorted({r['date'] for r in all_recordings})
+    available_hours = sorted({r['hour'] for r in all_recordings if not date_filter or r['date'] == date_filter})
+    available_minutes = sorted({r['minute'] for r in all_recordings 
+                              if (not date_filter or r['date'] == date_filter) and 
+                              (not hour_filter or r['hour'] == hour_filter)})
+    
     return render_template('recordings.html', 
                          recordings=recordings,
-                         cameras=cameras)  # Pass cameras to template
+                         cameras=cameras,
+                         available_dates=available_dates,
+                         available_hours=available_hours,
+                         available_minutes=available_minutes,
+                         current_filters={
+                             'date': date_filter,
+                             'camera_name': camera_filter,
+                             'hour': hour_filter,
+                             'minute': minute_filter
+                         })  # Pass cameras to template
 
 @app.route('/download_recording/<path:filename>')
 def download_recording(filename):
@@ -87,6 +116,10 @@ def filter_recordings():
     camera_name = request.form.get('camera_name')
     recordings = storage_manager.filter_recordings(date, camera_name)
     return render_template('recordings.html', recordings=recordings)
+
+@app.route('/play_recording/<path:filename>')
+def play_recording(filename):
+    return render_template('play.html', video_url=url_for('download_recording', filename=filename))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
