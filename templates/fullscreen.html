@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen - {{ camera.name }}</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+        }
+        .fullscreen-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .fullscreen-stream {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="fullscreen-container">
+        <img src="{{ camera.url }}" class="fullscreen-stream">
+    </div>
+    <a href="{{ url_for('index') }}" class="close-btn btn btn-danger">Close</a>
+</body>
+</html>

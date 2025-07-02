@@ -1,0 +1,21 @@
+.stream-preview {
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.card {
+    height: 100%;
+}
+
+.card-body {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+.table-responsive {
+    max-height: 70vh;
+    overflow-y: auto;
+}

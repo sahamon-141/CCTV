@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveillance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Video Surveillance System</h1>
+        
+        <div class="alert alert-info">
+            Disk Usage: {{ disk_usage.percent|round(2) }}% ({{ (disk_usage.used/1024/1024/1024)|round(2) }}GB / {{ (disk_usage.total/1024/1024/1024)|round(2) }}GB)
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col">
+                {% if not is_recording %}
+                    <a href="{{ url_for('start_recording') }}" class="btn btn-success">Start Recording</a>
+                {% else %}
+                    <a href="{{ url_for('stop_recording') }}" class="btn btn-danger">Stop Recording</a>
+                {% endif %}
+                <a href="{{ url_for('recordings') }}" class="btn btn-primary">View Recordings</a>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col">
+                <h3>Add Camera</h3>
+                <form method="POST" action="{{ url_for('add_camera') }}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" name="name" class="form-control" placeholder="Camera Name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="url" class="form-control" placeholder="Stream URL (e.g., http://192.168.0.238:81/stream)" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for name, camera in cameras.items() %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5>{{ name }}</h5>
+                        <div>
+                            <a href="{{ url_for('fullscreen', camera_name=name) }}" class="btn btn-sm btn-info">Fullscreen</a>
+                            <a href="{{ url_for('remove_camera', name=name) }}" class="btn btn-sm btn-danger">Remove</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <img src="{{ camera.url }}" class="img-fluid stream-preview">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
