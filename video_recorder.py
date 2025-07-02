@@ -13,7 +13,8 @@ class VideoRecorder:
         self.recording_threads = {}
         self.frame_buffers = {}
         self.fps_values = defaultdict(deque)
-        self.current_minute = None  # Track current minute
+        self.current_minute = None
+        self.show_windows = True  # Control whether to show preview windows
     
     def start_recording(self):
         self.is_recording = True
@@ -31,6 +32,7 @@ class VideoRecorder:
         self.is_recording = False
         for thread in self.recording_threads.values():
             thread.join()
+        cv2.destroyAllWindows()  # Close all preview windows when stopping
         self.recording_threads = {}
         self.frame_buffers = {}
     
@@ -51,13 +53,24 @@ class VideoRecorder:
         out = cv2.VideoWriter(file_path, fourcc, fps, (800, 600))
         
         last_check_time = time.time()
+        window_name = f"Live Feed: {name}"
         
         while self.is_recording and cap.isOpened():
             ret, frame = cap.read()
             if not ret:
                 break
             
+            # Write frame to video file
             out.write(frame)
+            
+            # Show live feed in window if enabled
+            if self.show_windows:
+                display_frame = frame.copy()
+                cv2.putText(display_frame, f"Recording: {current_date} {current_hour}:{self.current_minute}", 
+                           (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                cv2.imshow(window_name, display_frame)
+                cv2.waitKey(1)  # Needed to update the window
+            
             self.frame_buffers[name].append(time.time())
             
             # Check if we've reached a new minute
@@ -84,6 +97,7 @@ class VideoRecorder:
         cap.release()
         if out:
             out.release()
+        cv2.destroyWindow(window_name)
     
     def _calculate_fps(self, cap, name, sample_duration=5):
         start_time = time.time()
