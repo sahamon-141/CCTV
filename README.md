@@ -30,24 +30,28 @@ A Cheap Wireless Home surveillance system that records and manages video streams
    git clone https://github.com/yourusername/cctv-surveillance-system.git
    cd cctv-surveillance-system
 2. **Install dependencies**:
-   -sudo apt update && sudo apt upgrade -y 
-   -sudo apt-get install python3-pip python3-venv libatlas-base-dev ffmpeg
-   -sudo apt install python-opencv
-   -sudo apt install python flask
-3. **Mount Storage**:
+   ```bash
+   sudo apt update && sudo apt upgrade -y 
+   sudo apt-get install python3-pip python3-venv libatlas-base-dev ffmpeg
+   sudo apt install python-opencv
+   sudo apt install python flask
+4. **Mount Storage**:
    Create mount point
+   ```bash
    sudo mkdir /media/usb
-
-    Find your disk
-    sudo fdisk -l
-
-    Mount (add to /etc/fstab for auto-mount)
-    sudo mount /dev/sda1 /media/usb (replace dev/sda1 with your disk name)
-4.  ** Execute Flask Application **
-    -open terminal
+   ```
+   Select your Disk from the options
+   (replace dev/sda1 with your disk name)
+   ```bash
+   sudo fdisk -l
+   sudo mount /dev/sda1 /media/usb 
+   ```
+6.  ** Execute Flask Application **
+    open terminal (ctrl + Alt + T)
+    ```bash
     -cd /yourProject/Directory
     -sudo python3 app.py
-
+    ```
 ## 🖥️ Web Interface
 **Main Dashboard**
 ![image](https://github.com/user-attachments/assets/495886c6-dc3b-4841-8cf4-f3163f038b40)
