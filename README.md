@@ -64,11 +64,11 @@ A Cheap Wireless Home surveillance system that records and manages video streams
     ```
     Login with your credentials - add your device<br/>
     ![github tailscale](https://github.com/user-attachments/assets/fe6babbb-7829-4faa-9c03-6f4a4ab7abb9)<br/><br/>
-   Access the flask server by entering your tailscale ip on your browser<br/>
+    Access the flask server by entering your tailscale ip on your browser<br/>
    
-   ```bash
-   <your taislcale ip>:<port number>
-   ```
+    ```bash
+    <your taislcale ip>:<port number>
+    ```
 ## 🖥️ Web Interface
 **Main Dashboard**
 ![image](https://github.com/user-attachments/assets/495886c6-dc3b-4841-8cf4-f3163f038b40)
