@@ -5,6 +5,7 @@
 ![OpenCV](https://img.shields.io/badge/opencv-4.5%2B-orange)
 ![ESP32-CAM](https://img.shields.io/badge/ESP32--CAM-compatible-green)
 ![Raspberry Pi 4](https://img.shields.io/badge/Raspberry_Pi-compatible-green)
+![Tailscale](https://img.shields.io/badge/Tailscale-Integrated-yellow)
 A Cheap Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
 
 ## ✨ Features
@@ -14,7 +15,7 @@ A Cheap Wireless Home surveillance system that records and manages video streams
 - **Advanced filtering** - Search recordings by date, hour, minute, and camera
 - **Disk management** - Automatic cleanup when storage reaches thresholds
 - **Live preview** - View streams while recording
-- **Responsive web UI** - Access from any device
+- **Tailscale Integration** - Access your recordings outside local network
 
 ## 📦 Hardware Requirements
 
@@ -52,6 +53,22 @@ A Cheap Wireless Home surveillance system that records and manages video streams
     -cd /yourProject/Directory
     -sudo python3 app.py
     ```
+7.  **Tailscale Integration**
+    install tailscale in your PI
+    ```bash
+    curl -fsSL https://tailscale.com/install.sh | sh
+    ```
+    Start Tailscale
+    ```bash
+    sudo tailscale up
+    ```
+    Login with your credentials - add your device<br/>
+    ![github tailscale](https://github.com/user-attachments/assets/fe6babbb-7829-4faa-9c03-6f4a4ab7abb9)<br/><br/>
+   Access the flask server by entering your tailscale ip on your browser<br/>
+   
+   ```bash
+   <your taislcale ip>:<port number>
+   ```
 ## 🖥️ Web Interface
 **Main Dashboard**
 ![image](https://github.com/user-attachments/assets/495886c6-dc3b-4841-8cf4-f3163f038b40)
@@ -85,7 +102,7 @@ Actions:
 **Home Setup**
 ![WhatsApp Image 2025-07-03 at 07 04 35_5a058434](https://github.com/user-attachments/assets/29863d8e-a564-400d-bf45-1ee3ec39faba)
 
-**Hard Drive**
+**Hard Drive**<br/>
 ![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
 
