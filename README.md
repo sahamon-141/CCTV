@@ -116,14 +116,3 @@ ping <your esp cam IP>
 # Test stream directly
 vlc http://<your esp cam IP>/stream
 ```
-
-🤝 Contributing
-Fork the repository
-
-Create your feature branch (git checkout -b feature/AmazingFeature)
-
-Commit your changes (git commit -m 'Add some amazing feature')
-
-Push to the branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
