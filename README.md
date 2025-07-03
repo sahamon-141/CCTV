@@ -83,7 +83,11 @@ Actions:
 ![image](https://github.com/user-attachments/assets/7503799b-cda1-43ba-b2bc-6f217bb9c0c1)
 
 **Home Setup**
-![WhatsApp Image 2025-07-03 at 00 25 55_b6752dc2](https://github.com/user-attachments/assets/28eb499a-a0fd-42e0-bff1-57463f889a2e)
+![WhatsApp Image 2025-07-03 at 07 04 35_5a058434](https://github.com/user-attachments/assets/29863d8e-a564-400d-bf45-1ee3ec39faba)
+
+**Hard Drive**
+![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
+
 
 🤝 Contributing
 Fork the repository
