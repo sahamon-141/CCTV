@@ -5,8 +5,8 @@
 ![OpenCV](https://img.shields.io/badge/opencv-4.5%2B-orange)
 ![ESP32-CAM](https://img.shields.io/badge/ESP32--CAM-compatible-green)
 ![Raspberry Pi 4](https://img.shields.io/badge/Raspberry_Pi-compatible-green)
-![Tailscale](https://img.shields.io/badge/Tailscale-Integrated-yellow)
-A Cheap Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
+![Tailscale](https://img.shields.io/badge/Tailscale-Integrated-yellow)<br/><br/>
+A cheap alternative for Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
 
 ## ✨ Features
 
@@ -69,6 +69,8 @@ A Cheap Wireless Home surveillance system that records and manages video streams
     ```bash
     <your taislcale ip>:<port number>
     ```
+8.  ** Camera Setup **
+    The camera is setup using the basic esp32 camera webserver example [Link](https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer)<br/><br/>
 ## 🖥️ Web Interface
 **Main Dashboard**
 ![image](https://github.com/user-attachments/assets/495886c6-dc3b-4841-8cf4-f3163f038b40)
@@ -105,6 +107,15 @@ Actions:
 **Hard Drive**<br/>
 ![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
+🐛 Troubleshooting
+ESP32-CAM Not Connecting
+```bash
+# Check if camera is reachable
+ping <your esp cam IP>
+
+# Test stream directly
+vlc http://<your esp cam IP>/stream
+```
 
 🤝 Contributing
 Fork the repository
