@@ -41,7 +41,7 @@ A Cheap Wireless Home surveillance system that records and manages video streams
     Find your disk
     sudo fdisk -l
 
-    # Mount (add to /etc/fstab for auto-mount)
+    Mount (add to /etc/fstab for auto-mount)
     sudo mount /dev/sda1 /media/usb (replace dev/sda1 with your disk name)
 4.  ** Execute Flask Application **
     -open terminal
