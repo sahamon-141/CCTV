@@ -4,7 +4,7 @@
 ![Flask](https://img.shields.io/badge/flask-2.0%2B-lightgrey)
 ![OpenCV](https://img.shields.io/badge/opencv-4.5%2B-orange)
 ![ESP32-CAM](https://img.shields.io/badge/ESP32--CAM-compatible-green)
-![Raspberry Pi 4](https://img.shields.io/badge/ESP32--CAM-compatible-green)
+![Raspberry Pi 4](https://img.shields.io/badge/Raspberry_Pi-compatible-green)
 A Cheap Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
 
 ## ✨ Features
@@ -35,10 +35,10 @@ A Cheap Wireless Home surveillance system that records and manages video streams
    -sudo apt install python-opencv
    -sudo apt install python flask
 3. **Mount Storage**:
-   # Create mount point
+   Create mount point
    sudo mkdir /media/usb
 
-    # Find your disk
+    Find your disk
     sudo fdisk -l
 
     # Mount (add to /etc/fstab for auto-mount)
