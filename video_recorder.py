@@ -2,8 +2,11 @@ import os
 import cv2
 import threading
 import time
+import logging
 from datetime import datetime
 from collections import defaultdict, deque
+
+logger = logging.getLogger(__name__)
 
 class VideoRecorder:
     def __init__(self, camera_manager, storage_manager):
@@ -37,6 +40,7 @@ class VideoRecorder:
         self.frame_buffers = {}
     
     def _record_camera(self, name, url):
+        logger.info(f"Starting recording thread for camera:{name}")
         cap = cv2.VideoCapture(url)
         fps = self._calculate_fps(cap, name)
         cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
@@ -56,58 +60,68 @@ class VideoRecorder:
         last_check_time = time.time()
         window_name = f"Live Feed: {name}"
         retry_count = 0
-        while self.is_recording and retry_count < 3:
-            ret, frame = cap.read()
-            if not ret:
-                print(f"Reconnecting to {name}...")
-                cap.release()
-                time.sleep(2)
-                cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
-                retry_count += 1
-                continue
-            retry_count = 0
-            now = datetime.now()
-            timestamp = now.strftime("%H:%M:%S %d-%m-%Y")
-            cv2.putText(frame,timestamp,(10, 30),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-        
-            out.write(frame)
-            
-            # Show live feed in window if enabled
-            if self.show_windows:
-                display_frame = frame.copy()
-                cv2.putText(display_frame, f"Recording: {current_date} {current_hour}:{self.current_minute}", 
-                           (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                cv2.imshow(window_name, display_frame)
-                cv2.waitKey(1)  # Needed to update the window
-            
-            self.frame_buffers[name].append(time.time())
-            
-            # Check if we've reached a new minute
-            current_time = time.time()
-            if current_time - last_check_time >= 1:  # Check every second
+        window_created = False
+        try:
+            while self.is_recording and retry_count < 3:
+                ret, frame = cap.read()
+                if not ret:
+                    print(f"Reconnecting to {name}...")
+                    cap.release()
+                    time.sleep(2)
+                    cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
+                    retry_count += 1
+                    continue
+                retry_count = 0
                 now = datetime.now()
-                current_minute = now.strftime('%M')
-                
-                if current_minute != self.current_minute:
-                    # Minute changed, create new file
-                    out.release()
-                    current_hour = now.strftime('%H')
-                    self.current_minute = current_minute
-                    file_path = self.storage_manager.get_video_path(
-                        name, current_date, current_hour, self.current_minute)
-                    out = cv2.VideoWriter(file_path, fourcc, fps, (800, 600))
-                
-                last_check_time = current_time
-            
-            # Check disk space every 5 minutes
-            if int(current_time) % 300 == 0:
-                self.storage_manager.manage_disk_space()
+                timestamp = now.strftime("%H:%M:%S %d-%m-%Y")
+                cv2.putText(frame,timestamp,(10, 30),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,0,255),2)
         
-        cap.release()
-        if out:
-            out.release()
-        cv2.destroyWindow(window_name)
-    
+                out.write(frame)
+            
+                # Show live feed in window if enabled
+                if self.show_windows:
+                    display_frame = frame.copy()
+                    cv2.putText(display_frame, f"Recording...",(600, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                    
+                    if not window_created:
+                        cv2.namedWindow(window_name,cv2.WINDOW_NORMAL)
+                    cv2.imshow(window_name, display_frame)
+                    cv2.waitKey(1)  # Needed to update the window
+            
+                self.frame_buffers[name].append(time.time())
+            
+                # Check if we've reached a new minute
+                current_time = time.time()
+                if current_time - last_check_time >= 1:  # Check every second
+                    now = datetime.now()
+                    current_minute = now.strftime('%M')
+                
+                    if current_minute != self.current_minute:
+                        # Minute changed, create new file
+                        out.release()
+                        current_hour = now.strftime('%H')
+                        self.current_minute = current_minute
+                        file_path = self.storage_manager.get_video_path(name, current_date, current_hour, self.current_minute)
+                        out = cv2.VideoWriter(file_path, fourcc, fps, (800, 600))
+                
+                    last_check_time = current_time
+            
+                # Check disk space every 5 minutes
+                if int(current_time) % 300 == 0:
+                    self.storage_manager.manage_disk_space()
+        except Exception as e:
+            logger.error(f"Error in recording thread for {name} : {str(e)}")
+        finally:
+            logger.info(f"Stopped recording thread for camera: {name}")
+            cap.release()
+            if out:
+                out.release()
+            if window_created:
+                try:
+                    cv2.destroyWindow(window_name)
+                except:
+                    pass
+            cv2.waitKey(1)
     def _calculate_fps(self, cap, name, sample_duration=5):
         start_time = time.time()
         frame_count = 0

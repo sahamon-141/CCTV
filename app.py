@@ -1,11 +1,23 @@
 import os
 import threading
 import time
+import logging
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 from camera_manager import CameraManager
 from video_recorder import VideoRecorder
 from storage_manager import StorageManager
+
+# Configure logging at the start of your application
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('surveillance.log'),  # Log to file
+        logging.StreamHandler()  # Log to console
+    ]
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'
@@ -57,6 +69,7 @@ def stop_recording():
         is_recording = False
         recorder.stop_recording()
         recording_thread.join()
+        logger.info("Stopped recording")
     return redirect(url_for('index'))
 
 @app.route('/fullscreen/<camera_name>')
@@ -103,11 +116,13 @@ def recordings():
 
 @app.route('/download_recording/<path:filename>')
 def download_recording(filename):
+    logger.info(f"Downloaded {filename}")
     return send_from_directory(storage_manager.base_path, filename, as_attachment=True)
 
 @app.route('/delete_recording/<path:filename>')
 def delete_recording(filename):
     storage_manager.delete_recording(filename)
+    logger.info(f"deleted {filename}")
     return redirect(url_for('recordings'))
 
 @app.route('/filter_recordings', methods=['POST'])
