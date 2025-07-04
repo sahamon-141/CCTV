@@ -39,11 +39,12 @@ class VideoRecorder:
     def _record_camera(self, name, url):
         cap = cv2.VideoCapture(url)
         fps = self._calculate_fps(cap, name)
-        
+        cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         if fps <= 0:
             fps = 15  # Default FPS if calculation fails
         
-        current_date = datetime.now().strftime('%Y-%m-%d')
+        current_date = datetime.now().strftime('%d-%m-%Y')
         current_hour = datetime.now().strftime('%H')
         self.current_minute = datetime.now().strftime('%M')
         
@@ -54,13 +55,21 @@ class VideoRecorder:
         
         last_check_time = time.time()
         window_name = f"Live Feed: {name}"
-        
-        while self.is_recording and cap.isOpened():
+        retry_count = 0
+        while self.is_recording and retry_count < 3:
             ret, frame = cap.read()
             if not ret:
-                break
-            
-            # Write frame to video file
+                print(f"Reconnecting to {name}...")
+                cap.release()
+                time.sleep(2)
+                cap = cv2.VideoCapture(url, cv2.CAP_FFMPEG)
+                retry_count += 1
+                continue
+            retry_count = 0
+            now = datetime.now()
+            timestamp = now.strftime("%H:%M:%S %d-%m-%Y")
+            cv2.putText(frame,timestamp,(10, 30),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
+        
             out.write(frame)
             
             # Show live feed in window if enabled
