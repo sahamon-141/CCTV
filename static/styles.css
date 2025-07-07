@@ -19,3 +19,11 @@
     max-height: 70vh;
     overflow-y: auto;
 }
+.night-vision-btn.btn-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.night-mode {
+    filter: grayscale(100%) contrast(120%) brightness(80%);
+}

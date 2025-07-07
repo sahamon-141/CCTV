@@ -59,10 +59,41 @@
                     <div class="card-body">
                         <img src="{{ camera.url }}" class="img-fluid stream-preview">
                     </div>
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-dark night-vision-btn" 
+                                data-camera="{{ name }}"
+                                onclick="toggleNightVision('{{ name }}')">
+                            {% if camera.night_vision %}Day Mode{% else %}Night Vision{% endif %}
+                        </button>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+    <script>
+        function toggleNightVision(cameraName) {
+    fetch(`/toggle_night_vision/${cameraName}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const btn = document.querySelector(`.night-vision-btn[data-camera="${cameraName}"]`);
+                btn.textContent = data.night_vision ? 'Day Mode' : 'Night Vision';
+                btn.classList.toggle('btn-dark', !data.night_vision);
+                btn.classList.toggle('btn-warning', data.night_vision);
+                
+                // Refresh stream after 1 second
+                setTimeout(() => {
+                    const img = document.querySelector(`img[src*="${cameraName}"]`);
+                    if (img) {
+                        const src = img.src;
+                        img.src = '';
+                        setTimeout(() => img.src = src, 100);
+                    }
+                }, 1000);
+            }
+        });
+}
+    </script>
 </body>
 </html>

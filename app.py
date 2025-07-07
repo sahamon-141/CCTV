@@ -136,5 +136,19 @@ def filter_recordings():
 def play_recording(filename):
     return render_template('play.html', video_url=url_for('download_recording', filename=filename))
 
+@app.route('/set_night_vision/<camera_name>/<int:enable>')
+def set_night_vision(camera_name, enable):
+    success = camera_manager.set_night_vision(camera_name, bool(enable))
+    return jsonify(success=success)
+
+@app.route('/toggle_night_vision/<camera_name>')
+def toggle_night_vision(camera_name):
+    camera = camera_manager.get_camera(camera_name)
+    if camera:
+        new_state = not camera.get('night_vision', False)
+        success = camera_manager.set_night_vision(camera_name, new_state)
+        return jsonify(success=success, night_vision=new_state)
+    return jsonify(success=False)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
