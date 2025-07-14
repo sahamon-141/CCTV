@@ -79,7 +79,7 @@ A cheap alternative for Wireless Home surveillance system that records and manag
 -Disk usage monitoring
 -One-click recording control
 
-##Recordings Manager
+## Recordings Manager
 ![image](https://github.com/user-attachments/assets/232e9502-824e-438f-a35a-3e141e7e2e0d)
 
 Filter by:
@@ -98,16 +98,16 @@ Actions:
 
 🗑️ Delete
 
-##Live View
+## Live View
 ![image](https://github.com/user-attachments/assets/7503799b-cda1-43ba-b2bc-6f217bb9c0c1)
 
-##Home Setup
+## Home Setup
 ![WhatsApp Image 2025-07-03 at 07 04 35_5a058434](https://github.com/user-attachments/assets/29863d8e-a564-400d-bf45-1ee3ec39faba)
 
 ##Hard Drive**<br/>
 ![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
-##The Camera
+## The Camera
 ![WhatsApp Image 2025-07-07 at 09 30 13_2211d247](https://github.com/user-attachments/assets/a17903d0-8550-485c-ab91-e0b131d3f934)
 - Fan for cooling the system
 - A 400mah Li-ion Battery to power the system incase of power failure
