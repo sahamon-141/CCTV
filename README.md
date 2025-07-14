@@ -107,6 +107,14 @@ Actions:
 **Hard Drive**<br/>
 ![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
+**The Camera**
+![WhatsApp Image 2025-07-07 at 09 30 13_2211d247](https://github.com/user-attachments/assets/a17903d0-8550-485c-ab91-e0b131d3f934)
+- Fan for cooling the system
+- A 400mah Li-ion Battery to power the system incase of power failure
+- The Battery is charged via the inbuilt esp32s3 battery charging mechanism
+- Switch to turn off the battery power
+- A long range antenna for connectivity
+  
 🐛 Troubleshooting
 ESP32-CAM Not Connecting
 ```bash
