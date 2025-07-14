@@ -4,8 +4,9 @@
 ![Flask](https://img.shields.io/badge/flask-2.0%2B-lightgrey)
 ![OpenCV](https://img.shields.io/badge/opencv-4.5%2B-orange)
 ![ESP32-CAM](https://img.shields.io/badge/ESP32--CAM-compatible-green)
-![Raspberry Pi 4](https://img.shields.io/badge/ESP32--CAM-compatible-green)
-A Cheap Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
+![Raspberry Pi 4](https://img.shields.io/badge/Raspberry_Pi-compatible-green)
+![Tailscale](https://img.shields.io/badge/Tailscale-Integrated-yellow)<br/><br/>
+A cheap alternative for Wireless Home surveillance system that records and manages video streams from ESP32-CAM modules, with a Flask-based web interface.
 
 ## ✨ Features
 
@@ -14,7 +15,7 @@ A Cheap Wireless Home surveillance system that records and manages video streams
 - **Advanced filtering** - Search recordings by date, hour, minute, and camera
 - **Disk management** - Automatic cleanup when storage reaches thresholds
 - **Live preview** - View streams while recording
-- **Responsive web UI** - Access from any device
+- **Tailscale Integration** - Access your recordings outside local network
 
 ## 📦 Hardware Requirements
 
@@ -30,24 +31,46 @@ A Cheap Wireless Home surveillance system that records and manages video streams
    git clone https://github.com/yourusername/cctv-surveillance-system.git
    cd cctv-surveillance-system
 2. **Install dependencies**:
-   -sudo apt update && sudo apt upgrade -y 
-   -sudo apt-get install python3-pip python3-venv libatlas-base-dev ffmpeg
-   -sudo apt install python-opencv
-   -sudo apt install python flask
-3. **Mount Storage**:
-   # Create mount point
+   ```bash
+   sudo apt update && sudo apt upgrade -y 
+   sudo apt-get install python3-pip python3-venv libatlas-base-dev ffmpeg
+   sudo apt install python-opencv
+   sudo apt install python flask
+4. **Mount Storage**:
+   Create mount point
+   ```bash
    sudo mkdir /media/usb
-
-    # Find your disk
-    sudo fdisk -l
-
-    # Mount (add to /etc/fstab for auto-mount)
-    sudo mount /dev/sda1 /media/usb (replace dev/sda1 with your disk name)
-4.  ** Execute Flask Application **
-    -open terminal
+   ```
+   Select your Disk from the options
+   (replace dev/sda1 with your disk name)
+   ```bash
+   sudo fdisk -l
+   sudo mount /dev/sda1 /media/usb 
+   ```
+6.  ** Execute Flask Application **
+    open terminal (ctrl + Alt + T)
+    ```bash
     -cd /yourProject/Directory
     -sudo python3 app.py
-
+    ```
+7.  **Tailscale Integration**
+    install tailscale in your PI
+    ```bash
+    curl -fsSL https://tailscale.com/install.sh | sh
+    ```
+    Start Tailscale
+    ```bash
+    sudo tailscale up
+    ```
+    Login with your credentials - add your device<br/>
+    ![github tailscale](https://github.com/user-attachments/assets/fe6babbb-7829-4faa-9c03-6f4a4ab7abb9)<br/><br/>
+    Access the flask server by entering your tailscale ip on your browser<br/>
+   
+    ```bash
+    <your taislcale ip>:<port number>
+    ```
+8.  ** Camera Setup **
+    The camera is setup using the basic esp32 camera webserver example [Link](https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer)<br/><br/>
 ## 🖥️ Web Interface
 **Main Dashboard**
 ![image](https://github.com/user-attachments/assets/495886c6-dc3b-4841-8cf4-f3163f038b40)
@@ -79,15 +102,17 @@ Actions:
 ![image](https://github.com/user-attachments/assets/7503799b-cda1-43ba-b2bc-6f217bb9c0c1)
 
 **Home Setup**
-![WhatsApp Image 2025-07-03 at 00 25 55_b6752dc2](https://github.com/user-attachments/assets/28eb499a-a0fd-42e0-bff1-57463f889a2e)
+![WhatsApp Image 2025-07-03 at 07 04 35_5a058434](https://github.com/user-attachments/assets/29863d8e-a564-400d-bf45-1ee3ec39faba)
 
-🤝 Contributing
-Fork the repository
+**Hard Drive**<br/>
+![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
-Create your feature branch (git checkout -b feature/AmazingFeature)
+🐛 Troubleshooting
+ESP32-CAM Not Connecting
+```bash
+# Check if camera is reachable
+ping <your esp cam IP>
 
-Commit your changes (git commit -m 'Add some amazing feature')
-
-Push to the branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
+# Test stream directly
+vlc http://<your esp cam IP>/stream
+```
