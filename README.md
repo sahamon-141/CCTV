@@ -104,7 +104,7 @@ Actions:
 ## Home Setup
 ![WhatsApp Image 2025-07-03 at 07 04 35_5a058434](https://github.com/user-attachments/assets/29863d8e-a564-400d-bf45-1ee3ec39faba)
 
-##Hard Drive**<br/>
+## Hard Drive <br/>
 ![image](https://github.com/user-attachments/assets/4c9a81a6-df8d-41d9-a8cb-336fcb436647)
 
 ## The Camera
